@@ -38,29 +38,89 @@
     
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    //<!-- const fifteenth = inventors.filter(inventor=>{
+    // if(String(inventor.year).slice(0,2)=='15'){
+    //    return true;
+    //  }
+   // });
+   
+   //abbreviated version of the above
+    const fifteenth = inventors.filter(inventor=>String(inventor.year).slice(0,2)=='15');
+    console.table(fifteenth);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
 
+    const inventorNames = inventors.map(inventor=> `${inventor.first} ${inventor.last}`);
+    console.table(inventorNames);
+
     // Array.prototype.sort()
+    // Passes 2 args, and you have to tell it whether 1st is bigger than second (return 1), otherwise return -1
     // 3. Sort the inventors by birthdate, oldest to youngest
+    
+    const inventorsbyBirth = inventors.sort((a,b)=>
+      a.year>b.year ? 1: -1
+    );
+    console.table(inventorsbyBirth);
 
     // Array.prototype.reduce()
+    //The callback function must return a value. This value is the value that will be used as 
+    //the accumulator for the next call to the callback function. The reduce() method will 
+    //continue calling the callback function until it reaches the end of the array. The final 
+    //value returned by the callback function will be the value returned by the reduce() method.
+    // Accumulator id undefined, last parameter set to 0 to initilize it at 0
+
     // 4. How many years did all the inventors live all together?
+    const totalYears = inventors.reduce((total,inventor) => {return total += (inventor.passed - inventor.year);},0);//Need to add 0 to set default value of accumulator
+    console.log(totalYears);
 
     // 5. Sort the inventors by years lived
+
+      const inventorsSorted = inventors.sort((a,b)=> ((a.passed - a.year) > (b.passed - b.year)) ? 1 : -1);
+      console.table(inventorsSorted);
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
 
+    const list = Array.from(document.querySelectorAll('.mw-category a')); //array of dom elements
+    const filteredList = list
+      .map(a => a.innerText) //list is an array of DOM elements, and  can run the innerText property and other DOM functions on it.
+      .filter(city => city.includes("de"));
+    console.table(filteredList);
+
+  // let list2 =[];
+  //   for(key of list){
+  //     list2.push(key.innerText);
+  //   }
+  // list3 = list2.filter(text => text.includes("de"));
+    //console.table(list3);
+
+    //for(key of list){
+    //  key.innerText.includes("de") ?
+    //    list2.push(key.innerText) :
+    //    ''}
+    //     list.map(aElement => aElement.innerText);
+
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+      const split = people.sort((a,b)=>{ //Sort based on first and next item
+        const [aLast, aFirst] = a.split(","); //Split first item into first and last name
+        const [bLast, bFirst] = b.split(","); //and second element
+        return aLast < bLast ? -1 : 1 //evaluate the last names of each to determine order
+      });
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
-
+    const transport = data.reduce((obj,vehicle)=>{
+      if(!obj[vehicle]){//if obj doesnt have the given vehicle property
+        obj[vehicle] = 0; //create the vehicle property and set it to 0
+      } 
+      obj[vehicle]++; //increment each
+      return obj //always need to return what we're acccumulating, in this case obj, after we;re done altering
+    },{});  //default empty object for obj
+    console.table(transport);
   </script>
 </body>
 </html>
